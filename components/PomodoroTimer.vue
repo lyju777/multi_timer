@@ -1,6 +1,6 @@
 <template>
-  <container
-    class="p-6 bg-gray-800 rounded-lg shadow-xl text-center text-white"
+  <div
+    class="p-6 bg-gray-800 rounded-lg shadow-xl text-center text-white min-w-80 min-h-57"
   >
     <!-- 타이머 -->
     <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
@@ -32,33 +32,41 @@
 
     <!-- 타이머 버튼 -->
     <div class="flex justify-center space-x-5 mt-4">
-      <button
-        @click="toggleTimer"
-        class="px-6 py-2 font-semibold rounded-md transition-colors"
-        :class="{
-          'bg-green-500 hover:bg-green-600': !isRunning,
-          'bg-yellow-500 hover:bg-yellow-600': isRunning,
-        }"
-      >
-        {{ isRunning ? "정지" : "시작" }}
-      </button>
-      <button
+      <Button
+        @click="startTimer"
+        raised
+        rounded
+        icon="pi pi-play"
+        variant="outlined"
+      />
+      <Button
+        @click="pauseTimer"
+        rounded
+        raised
+        icon="pi pi-pause"
+        variant="outlined"
+      />
+      <Button
         @click="resetTimer"
-        class="px-6 py-2 font-semibold bg-gray-600 hover:bg-gray-700 rounded-md transition-colors"
-      >
-        초기화
-      </button>
+        raised
+        rounded
+        icon="pi pi-refresh"
+        variant="outlined"
+      />
     </div>
-  </container>
+  </div>
 </template>
 
 <script setup lang="ts">
+import Button from "primevue/button";
+import { useThrottleFn } from "@vueuse/core";
+
 const props = withDefaults(
   defineProps<{
     workMinutes?: number;
   }>(),
   {
-    workMinutes: 0,
+    workMinutes: 5,
   }
 );
 
@@ -83,7 +91,8 @@ const hours = computed(() =>
 );
 
 // 타이머 시작
-const startTimer = () => {
+const startTimer = useThrottleFn(() => {
+  if (isRunning.value) return;
   isRunning.value = true;
   timer = setInterval(() => {
     if (timeLeft.value > 0) {
@@ -92,7 +101,7 @@ const startTimer = () => {
       switchMode();
     }
   }, 1000);
-};
+}, 1000);
 
 // 타이머 일시정지
 const pauseTimer = () => {
@@ -103,22 +112,11 @@ const pauseTimer = () => {
   }
 };
 
-// 타이머 시작/정지 전환
-const toggleTimer = () => {
-  if (isRunning.value) {
-    pauseTimer();
-  } else {
-    startTimer();
-  }
-};
-
 // 모드 전환
 const switchMode = () => {
   pauseTimer();
   totalSeconds.value = props.workMinutes * 60;
   timeLeft.value = totalSeconds.value;
-  // 다음 세션을 자동으로 시작하고 싶다면 아래 주석을 해제하세요.
-  // startTimer()
 };
 
 const resetTimer = () => {
