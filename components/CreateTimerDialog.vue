@@ -5,6 +5,7 @@
       header="🕒타이머를 생성하세요."
       :style="{ width: '25rem', height: '14rem' }"
       class="cursor-pointer"
+      @hide="handleHide"
     >
       <DatePicker
         v-model="setTimer"
@@ -19,24 +20,21 @@
           type="button"
           label="취소"
           severity="secondary"
-          @click="dialogVisible = false"
+          @click="closeDialog"
         ></Button>
-        <Button type="button" label="저장" @click="saveTimer"></Button>
+        <Button
+          type="button"
+          label="저장"
+          :disabled="isDisabled"
+          @click="saveTimer"
+        ></Button>
       </div>
     </Dialog>
   </div>
 </template>
 
 <script setup lang="ts">
-import Dialog from "primevue/dialog";
-import DatePicker from "primevue/datepicker";
-import Button from "primevue/button";
-import { useTimerStore } from "~/stores/timer";
-
-const setTimer = ref(new Date());
-const timerStore = useTimerStore();
-
-const { workHours, workMinutes } = storeToRefs(timerStore);
+const setTimer = ref(new Date(0, 0, 0, 0, 0, 0));
 
 const props = defineProps({
   modelValue: {
@@ -45,23 +43,33 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const { modelValue } = toRefs(props);
+
+const emit = defineEmits(["update:modelValue", "save"]);
 
 const dialogVisible = computed({
-  get: () => props.modelValue,
+  get: () => modelValue.value,
   set: (value) => emit("update:modelValue", value),
 });
+
+const closeDialog = () => {
+  dialogVisible.value = false;
+};
 
 const saveTimer = () => {
   const hours = setTimer.value.getHours();
   const minutes = setTimer.value.getMinutes();
-
-  // store에 타이머 설정 저장
-  workHours.value = hours;
-  workMinutes.value = minutes;
-
-  dialogVisible.value = false;
+  emit("save", { hours, minutes });
+  closeDialog();
 };
+
+const handleHide = () => {
+  setTimer.value = new Date(0, 0, 0, 0, 0, 0);
+};
+
+const isDisabled = computed(() => {
+  return setTimer.value.getHours() === 0 && setTimer.value.getMinutes() === 0;
+});
 </script>
 
 <style scoped></style>
