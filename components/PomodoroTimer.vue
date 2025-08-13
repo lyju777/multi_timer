@@ -50,10 +50,10 @@
       <Button @click="startTimer" raised rounded icon="pi pi-play" outlined />
       <Button @click="pauseTimer" rounded raised icon="pi pi-pause" outlined />
       <Button
-        @click="resetTimer"
+        @click="emit('delete-timer')"
         raised
         rounded
-        icon="pi pi-refresh"
+        icon="pi pi-eraser"
         outlined
       />
     </div>
@@ -71,7 +71,7 @@ const props = defineProps({
 
 const { initialHours, initialMinutes, isSet } = toRefs(props);
 
-const emit = defineEmits(["timer-set"]);
+const emit = defineEmits(["timer-set", "delete-timer"]);
 
 const workHours = ref(initialHours.value);
 const workMinutes = ref(initialMinutes.value);
@@ -136,11 +136,6 @@ const pauseTimer = () => {
     clearInterval(timer);
     timer = null;
   }
-};
-
-const resetTimer = () => {
-  pauseTimer();
-  timeLeft.value = totalSeconds.value;
 };
 
 onUnmounted(() => {

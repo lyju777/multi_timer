@@ -15,6 +15,7 @@
         :key="timer.id"
         :is-set="timer.isSet"
         @timer-set="handleNewTimerSet(timer.id)"
+        @delete-timer="handleDeleteTimer(timer.id)"
       />
     </div>
   </div>
@@ -22,22 +23,11 @@
 
 <script setup lang="ts">
 import PomodoroTimer from "~/components/PomodoroTimer.vue";
+import { useTimersStore } from "~/stores/timers";
 
-interface Timer {
-  id: number;
-  isSet: boolean;
-}
-
-const timers = ref<Timer[]>([{ id: 1, isSet: false }]);
-let nextTimerId = 2;
-
-const handleNewTimerSet = (id: number) => {
-  const timer = timers.value.find((t) => t.id === id);
-  if (timer && !timer.isSet) {
-    timer.isSet = true;
-    timers.value.push({ id: nextTimerId++, isSet: false });
-  }
-};
+const timersStore = useTimersStore();
+const { timers } = storeToRefs(timersStore);
+const { handleNewTimerSet, handleDeleteTimer } = timersStore;
 </script>
 
 <style scoped></style>
