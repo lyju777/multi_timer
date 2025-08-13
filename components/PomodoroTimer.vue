@@ -84,6 +84,19 @@ const visible = ref(false);
 let newTotalSeconds = 0;
 let timer: NodeJS.Timeout | null = null;
 
+watch(
+  () => props.isSet,
+  (newValue) => {
+    isTimerSet.value = newValue;
+    if (!newValue) {
+      workHours.value = 0;
+      workMinutes.value = 0;
+      totalSeconds.value = 0;
+      timeLeft.value = 0;
+    }
+  }
+);
+
 const showCreateTimerDialog = () => {
   visible.value = true;
 };
