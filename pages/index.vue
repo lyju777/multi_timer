@@ -13,8 +13,8 @@
       <PomodoroTimer
         v-for="timer in timers"
         :key="timer.id"
-        :is-set="timer.isSet"
-        @timer-set="handleNewTimerSet(timer.id)"
+        :timer="timer"
+        @timer-set="(payload) => handleNewTimerSet(timer.id, payload)"
         @delete-timer="handleDeleteTimer(timer.id)"
       />
     </div>

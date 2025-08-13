@@ -5,7 +5,7 @@
     <CreateTimerDialog v-model="visible" @save="handleTimerSave" />
     <!-- 타이머 생성 버튼 -->
     <div
-      v-if="!isTimerSet"
+      v-if="!isSet"
       class="flex justify-center items-center m-auto absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
     >
       <Button
@@ -46,7 +46,7 @@
     </div>
 
     <!-- 타이머 조작 버튼 -->
-    <div v-if="isTimerSet" class="flex justify-center space-x-5 mt-4">
+    <div v-if="isSet" class="flex justify-center space-x-5 mt-4">
       <Button @click="startTimer" raised rounded icon="pi pi-play" outlined />
       <Button @click="pauseTimer" rounded raised icon="pi pi-pause" outlined />
       <Button
@@ -62,59 +62,45 @@
 
 <script setup lang="ts">
 import { useThrottleFn } from "@vueuse/core";
+import type { Timer } from "~/types/Timer";
+import type { PropType } from "vue";
 
 const props = defineProps({
-  initialHours: { type: Number, default: 0 },
-  initialMinutes: { type: Number, default: 0 },
-  isSet: { type: Boolean, default: false },
+  timer: {
+    type: Object as PropType<Timer>,
+    required: true,
+  },
 });
-
-const { initialHours, initialMinutes, isSet } = toRefs(props);
 
 const emit = defineEmits(["timer-set", "delete-timer"]);
 
-const workHours = ref(initialHours.value);
-const workMinutes = ref(initialMinutes.value);
+// toRefs 대신 computed로 안전하게 props에 접근합니다.
+const isSet = computed(() => props.timer.isSet);
+const workHours = computed(() => props.timer.workHours);
+const workMinutes = computed(() => props.timer.workMinutes);
 
-const totalSeconds = ref(workHours.value * 3600 + workMinutes.value * 60);
-const timeLeft = ref(totalSeconds.value);
+// 종속된 값들도 모두 computed로 변경하여 반응성을 유지합니다.
+const totalSeconds = computed(
+  () => workHours.value * 3600 + workMinutes.value * 60
+);
+const timeLeft = ref(totalSeconds.value); // timeLeft는 직접 변경되므로 ref를 유지합니다.
+
 const isRunning = ref(false);
-const isTimerSet = ref(isSet.value);
 const visible = ref(false);
-let newTotalSeconds = 0;
 let timer: NodeJS.Timeout | null = null;
 
-watch(
-  () => props.isSet,
-  (newValue) => {
-    isTimerSet.value = newValue;
-    if (!newValue) {
-      workHours.value = 0;
-      workMinutes.value = 0;
-      totalSeconds.value = 0;
-      timeLeft.value = 0;
-    }
-  }
-);
+// totalSeconds가 바뀔 때 timeLeft를 업데이트합니다.
+watch(totalSeconds, (newTotal) => {
+  timeLeft.value = newTotal;
+});
 
 const showCreateTimerDialog = () => {
   visible.value = true;
 };
 
-const handleTimerSave = ({
-  hours,
-  minutes,
-}: {
-  hours: number;
-  minutes: number;
-}) => {
-  workHours.value = hours;
-  workMinutes.value = minutes;
-  newTotalSeconds = hours * 3600 + minutes * 60;
-  totalSeconds.value = newTotalSeconds;
-  timeLeft.value = newTotalSeconds;
-  isTimerSet.value = true;
-  emit("timer-set");
+const handleTimerSave = (payload: { hours: number; minutes: number }) => {
+  emit("timer-set", payload);
+  visible.value = false;
 };
 
 const minutes = computed(() =>
