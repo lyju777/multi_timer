@@ -48,8 +48,23 @@
 
     <!-- 타이머 조작 버튼 -->
     <div v-if="isSet" class="flex justify-center space-x-5 mt-4">
-      <Button @click="startTimer" raised rounded icon="pi pi-play" outlined />
-      <Button @click="pauseTimer" rounded raised icon="pi pi-pause" outlined />
+      <Button
+        @click="startTimer"
+        :disabled="isRunning || remainingTime === 0"
+        raised
+        rounded
+        icon="pi pi-play"
+        outlined
+      />
+      <Button
+        @click="pauseTimer"
+        :disabled="!isRunning || remainingTime === 0"
+        rounded
+        raised
+        icon="pi pi-pause"
+        outlined
+      />
+      <Button @click="resetTimer" raised rounded icon="pi pi-replay" outlined />
       <ConfirmPopup ref="confirmPopup"></ConfirmPopup>
       <Button
         @click="deleteTimer($event)"
@@ -63,14 +78,15 @@
 </template>
 
 <script setup lang="ts">
-import { useThrottleFn } from "@vueuse/core";
 import type { Timer } from "~/types/Timer";
 import type { PropType } from "vue";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
+import { useTimersStore } from "~/stores/timers";
 
 const confirm = useConfirm();
 const toast = useToast();
+const timersStore = useTimersStore();
 
 const props = defineProps({
   timer: {
@@ -81,73 +97,57 @@ const props = defineProps({
 
 const emit = defineEmits(["timer-set", "delete-timer"]);
 
-const isSet = computed(() => props.timer.isSet); // 타이머 설정 여부
-const workHours = computed(() => props.timer.workHours); // 타이머 시간
-const workMinutes = computed(() => props.timer.workMinutes); // 타이머 분
+const timerData = computed(() =>
+  timersStore.timers.find((t) => t.id === props.timer.id)
+);
 
-const totalSeconds = computed(
-  () => workHours.value * 3600 + workMinutes.value * 60
-); // 타이머 총 시간
-const timeLeft = ref(totalSeconds.value); // 타이머 남은 시간
+const isSet = computed(() => timerData.value?.isSet ?? false);
+const isRunning = computed(() => timerData.value?.isRunning ?? false);
+const remainingTime = computed(() => timerData.value?.remainingTime ?? 0);
 
-const isRunning = ref(false); // 타이머 실행 여부
-const visible = ref(false); // 타이머 생성 다이얼로그 표시 여부
-let timer: NodeJS.Timeout | null = null;
+const visible = ref(false);
 
-// 타이머 시간 계산
-watch(totalSeconds, (newTotal) => {
-  timeLeft.value = newTotal;
-});
-
-// 타이머 생성 다이얼로그 표시
 const showCreateTimerDialog = () => {
   visible.value = true;
 };
 
-// 타이머 생성
 const handleTimerSave = (payload: { hours: number; minutes: number }) => {
   emit("timer-set", payload);
   visible.value = false;
 };
 
-// 타이머 시간 계산
 const minutes = computed(() =>
-  Math.floor((timeLeft.value / 60) % 60)
+  Math.floor((remainingTime.value / 60) % 60)
     .toString()
     .padStart(2, "0")
 );
 const seconds = computed(() =>
-  (timeLeft.value % 60).toString().padStart(2, "0")
+  (remainingTime.value % 60).toString().padStart(2, "0")
 );
 const hours = computed(() =>
-  Math.floor(timeLeft.value / 3600)
+  Math.floor(remainingTime.value / 3600)
     .toString()
     .padStart(2, "0")
 );
 
-// 타이머 시작
-const startTimer = useThrottleFn(() => {
-  if (isRunning.value || timeLeft.value <= 0) return;
-  isRunning.value = true;
-  timer = setInterval(() => {
-    if (timeLeft.value > 0) {
-      timeLeft.value--;
-    } else {
-      pauseTimer();
-    }
-  }, 1000);
-}, 1000);
-
-// 타이머 일시정지
-const pauseTimer = () => {
-  isRunning.value = false;
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
+const startTimer = () => {
+  if (timerData.value) {
+    timersStore.startTimer(timerData.value.id);
   }
 };
 
-// 타이머 제거
+const pauseTimer = () => {
+  if (timerData.value) {
+    timersStore.pauseTimer(timerData.value.id);
+  }
+};
+
+const resetTimer = () => {
+  if (timerData.value) {
+    timersStore.resetTimer(timerData.value.id);
+  }
+};
+
 const deleteTimer = (event: Event) => {
   confirm.require({
     target: event.currentTarget as HTMLElement,
@@ -175,10 +175,4 @@ const deleteTimer = (event: Event) => {
     },
   });
 };
-
-onUnmounted(() => {
-  if (timer) {
-    clearInterval(timer);
-  }
-});
 </script>
