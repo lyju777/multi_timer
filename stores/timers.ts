@@ -5,6 +5,7 @@ export const useTimersStore = defineStore(
   () => {
     const timers = ref<Timer[]>([]);
     const nextTimerId = ref(1);
+    const finishedTimerId = ref<number | null>(null);
 
     const timerIntervals: Record<number, NodeJS.Timeout> = {};
 
@@ -25,6 +26,7 @@ export const useTimersStore = defineStore(
           clearInterval(timerIntervals[timer.id]);
           delete timerIntervals[timer.id];
           localStorage.removeItem(`timer-endTime-${timer.id}`);
+          finishedTimerId.value = timer.id;
         }
       }, 1000);
     }
@@ -150,6 +152,10 @@ export const useTimersStore = defineStore(
       }
     };
 
+    const clearFinishedTimer = () => {
+      finishedTimerId.value = null;
+    };
+
     return {
       timers,
       nextTimerId,
@@ -158,6 +164,8 @@ export const useTimersStore = defineStore(
       startTimer,
       pauseTimer,
       resetTimer,
+      finishedTimerId,
+      clearFinishedTimer,
     };
   },
   {
