@@ -1,4 +1,4 @@
-import type { Timer } from "~/types/Timer";
+import type { Timer, TimerSetPayload } from "~/types/Timer";
 
 export const useTimersStore = defineStore(
   "timers",
@@ -71,6 +71,8 @@ export const useTimersStore = defineStore(
           workMinutes: 0,
           isRunning: false,
           remainingTime: 0,
+          timerMark: "",
+          content: "",
         });
       }
 
@@ -102,16 +104,15 @@ export const useTimersStore = defineStore(
       });
     });
 
-    const handleNewTimerSet = (
-      id: number,
-      payload: { hours: number; minutes: number }
-    ) => {
+    const handleNewTimerSet = (id: number, payload: TimerSetPayload) => {
       const timer = timers.value.find((t) => t.id === id);
       if (timer && !timer.isSet) {
         timer.isSet = true;
         timer.workHours = payload.hours;
         timer.workMinutes = payload.minutes;
         timer.remainingTime = payload.hours * 3600 + payload.minutes * 60;
+        timer.timerMark = payload.timerMark;
+        timer.content = payload.content;
 
         timers.value.push({
           id: nextTimerId.value++,
@@ -120,6 +121,8 @@ export const useTimersStore = defineStore(
           workMinutes: 0,
           isRunning: false,
           remainingTime: 0,
+          timerMark: "",
+          content: "",
         });
       }
     };
@@ -141,6 +144,8 @@ export const useTimersStore = defineStore(
           workMinutes: 0,
           isRunning: false,
           remainingTime: 0,
+          timerMark: "",
+          content: "",
         });
       }
     };

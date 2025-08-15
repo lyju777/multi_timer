@@ -4,19 +4,41 @@
       v-model:visible="dialogVisible"
       modal
       header="🕒타이머를 생성하세요."
-      :style="{ width: '25rem', height: '14rem' }"
+      :style="{ width: '25rem', height: '22rem' }"
       class="cursor-pointer"
       @hide="handleHide"
     >
+      <IconField class="mb-5">
+        <InputIcon class="pi pi-pencil" />
+        <InputText
+          fluid
+          placeholder="타이머 내용"
+          v-model="timerContent"
+          maxlength="15"
+        />
+      </IconField>
+
       <DatePicker
         v-model="setTimer"
         showIcon
         fluid
         iconDisplay="input"
+        icon="pi pi-clock"
         timeOnly
-        class="mb-8"
+        class="mb-5"
       />
-      <div class="flex justify-end gap-2">
+
+      <Select
+        v-model="timerMark"
+        :options="timerMarks"
+        checkmark
+        :highlightOnSelect="false"
+        optionLabel="name"
+        placeholder="mark"
+        fluid
+      />
+
+      <div class="flex justify-end gap-2 mt-10">
         <Button
           type="button"
           variant="outlined"
@@ -37,6 +59,17 @@
 
 <script setup lang="ts">
 const setTimer = ref(new Date(0, 0, 0, 0, 0, 0));
+
+const timerContent = ref("");
+
+const timerMark = ref();
+const timerMarks = ref([
+  { name: "✏️공부", code: "✏️" },
+  { name: "📖독서", code: "📖" },
+  { name: "🏀운동", code: "🏀" },
+  { name: "🍳요리", code: "🍳" },
+  { name: "🔥기타", code: "🔥" },
+]);
 
 const props = defineProps({
   modelValue: {
@@ -61,7 +94,12 @@ const closeDialog = () => {
 const saveTimer = () => {
   const hours = setTimer.value.getHours();
   const minutes = setTimer.value.getMinutes();
-  emit("save", { hours, minutes });
+  emit("save", {
+    hours,
+    minutes,
+    timerMark: timerMark.value.code,
+    content: timerContent.value,
+  });
   closeDialog();
 }; // 타이머 시간 저장
 
@@ -70,7 +108,11 @@ const handleHide = () => {
 }; // 타이머 시간 초기화
 
 const isDisabled = computed(() => {
-  return setTimer.value.getHours() === 0 && setTimer.value.getMinutes() === 0;
+  return (
+    (setTimer.value.getHours() === 0 && setTimer.value.getMinutes() === 0) ||
+    timerMark.value === undefined ||
+    timerContent.value === ""
+  );
 }); // 타이머 시간 비어있는지 확인
 </script>
 

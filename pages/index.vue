@@ -1,5 +1,4 @@
 <template>
-  <MenuBar />
   <div
     class="min-h-screen bg-zinc-900 flex flex-col items-center justify-center pt-5 pb-5"
   >
@@ -24,7 +23,6 @@
 
 <script setup lang="ts">
 import PomodoroTimer from "~/components/PomodoroTimer.vue";
-import MenuBar from "~/components/MenuBar.vue";
 import { useTimersStore } from "~/stores/timers";
 
 const timersStore = useTimersStore();

@@ -1,9 +1,14 @@
 <template>
   <div
-    class="p-6 bg-zinc-800 rounded-lg shadow-xl text-center text-white min-w-80 min-h-52 relative"
+    class="p-6 bg-zinc-800 rounded-lg shadow-xl text-center text-white min-w-80 min-h-56 relative"
   >
     <Toast />
     <CreateTimerDialog v-model="visible" @save="handleTimerSave" />
+    <span class="text-lg font-bold text-left absolute top-5 left-6">
+      {{ timerMark }}
+      {{ content }}
+    </span>
+
     <!-- 타이머 생성 버튼 -->
     <div
       v-if="!isSet"
@@ -19,7 +24,10 @@
       />
     </div>
     <!-- 타이머 디스플레이 -->
-    <div v-else class="grid grid-flow-col gap-5 text-center auto-cols-max">
+    <div
+      v-else
+      class="grid grid-flow-col gap-5 text-center auto-cols-max mt-10"
+    >
       <div
         class="flex flex-col p-4 max-w-20 bg-[#0b0809] rounded-lg text-neutral-content"
       >
@@ -78,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Timer } from "~/types/Timer";
+import type { Timer, TimerSetPayload } from "~/types/Timer";
 import type { PropType } from "vue";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
@@ -105,13 +113,16 @@ const isSet = computed(() => timerData.value?.isSet ?? false);
 const isRunning = computed(() => timerData.value?.isRunning ?? false);
 const remainingTime = computed(() => timerData.value?.remainingTime ?? 0);
 
+const timerMark = computed(() => timerData.value?.timerMark ?? "");
+const content = computed(() => timerData.value?.content ?? "");
+
 const visible = ref(false);
 
 const showCreateTimerDialog = () => {
   visible.value = true;
 };
 
-const handleTimerSave = (payload: { hours: number; minutes: number }) => {
+const handleTimerSave = (payload: TimerSetPayload) => {
   emit("timer-set", payload);
   visible.value = false;
 };

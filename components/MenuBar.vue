@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card sticky z-10 top-0 left-0 right-0">
     <Menubar :model="items">
       <template #item="{ item, props, hasSubmenu }">
         <router-link
@@ -27,7 +27,6 @@
       </template>
       <template #end>
         <Button
-          @click="login"
           severity="success"
           variant="text"
           label="Login"
@@ -39,21 +38,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-
 const router = useRouter();
 
 const items = ref([
   {
     label: "Home",
     icon: "pi pi-home",
+    command: () => {
+      router.push("/");
+    },
   },
   {
     label: "TimeChart",
     icon: "pi pi-calendar-clock",
     command: () => {
-      router.push("/");
+      router.push("/timeLine");
     },
   },
 ]);
