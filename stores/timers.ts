@@ -1,4 +1,5 @@
 import type { Timer, TimerSetPayload } from "~/types/Timer";
+import { useHistoryStore } from "./history";
 
 export const useTimersStore = defineStore(
   "timers",
@@ -27,6 +28,14 @@ export const useTimersStore = defineStore(
           delete timerIntervals[timer.id];
           localStorage.removeItem(`timer-endTime-${timer.id}`);
           finishedTimerId.value = timer.id;
+
+          // history 스토어에 기록 추가
+          const historyStore = useHistoryStore();
+          historyStore.addRecord({
+            durationMinutes: timer.workHours * 60 + timer.workMinutes,
+            timerMark: timer.timerMark,
+            content: timer.content,
+          });
         }
       }, 1000);
     }

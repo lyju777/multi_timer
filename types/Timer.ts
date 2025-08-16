@@ -16,3 +16,11 @@ export interface TimerSetPayload {
   timerMark: string;
   content: string;
 }
+
+export interface TimerRecord {
+  id: string;
+  completedAt: string;
+  durationMinutes: number;
+  timerMark: string;
+  content: string;
+}

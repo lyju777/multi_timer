@@ -39,11 +39,13 @@ export const useTimerSound = () => {
   const startAlarm = () => {
     stopAudio(); // 이전에 재생중인 오디오가 있다면 정지
     playCount = 0;
-    audio.value = new Audio("/audio/timer_sound.mp3");
-    // 재생이 끝나면 300ms 후 다음 재생 예약
-    audio.value.addEventListener("ended", delayedPlayNext);
-    // 첫 재생도 300ms 후 시작
-    delayedPlayNext();
+    if (!process.server) {
+      audio.value = new Audio("/audio/timer_sound.mp3");
+      // 재생이 끝나면 300ms 후 다음 재생 예약
+      audio.value.addEventListener("ended", delayedPlayNext);
+      // 첫 재생도 300ms 후 시작
+      delayedPlayNext();
+    }
   };
 
   const stopAlarm = () => {
