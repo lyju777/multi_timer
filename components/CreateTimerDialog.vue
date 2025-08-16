@@ -3,7 +3,7 @@
     <Dialog
       v-model:visible="dialogVisible"
       modal
-      header="🕒타이머를 생성하세요."
+      header="타이머를 생성해주세요."
       :style="{ width: '25rem', height: '22rem' }"
       class="cursor-pointer"
       @hide="handleHide"
@@ -12,7 +12,7 @@
         <InputIcon class="pi pi-pencil" />
         <InputText
           fluid
-          placeholder="타이머 내용"
+          placeholder="메모"
           v-model="timerContent"
           maxlength="15"
         />
@@ -34,7 +34,7 @@
         checkmark
         :highlightOnSelect="false"
         optionLabel="name"
-        placeholder="mark"
+        placeholder="콘텐츠 선택"
         fluid
       />
 
