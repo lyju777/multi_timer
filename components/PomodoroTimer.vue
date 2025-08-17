@@ -1,6 +1,6 @@
 <template>
   <div
-    class="p-6 bg-zinc-800 rounded-lg shadow-xl text-center text-white min-w-80 min-h-56 relative"
+    class="p-6 bg-zinc-950/60 rounded-lg shadow-xl text-center text-white min-w-80 min-h-56 relative"
   >
     <Toast />
     <CreateTimerDialog v-model="visible" @save="handleTimerSave" />
@@ -167,11 +167,13 @@ const deleteTimer = (event: Event) => {
     icon: "pi pi-info-circle",
     rejectLabel: "취소",
     rejectProps: {
+      icon: "pi pi-times",
       label: "취소",
       severity: "secondary",
       outlined: true,
     },
     acceptProps: {
+      icon: "pi pi-check",
       label: "제거",
       severity: "danger",
     },

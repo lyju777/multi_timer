@@ -1,8 +1,8 @@
 <template>
   <div>
     <ClientOnly>
-      <div class="card sticky z-10 top-0 left-0 right-0">
-        <Menubar :model="items">
+      <div class="sticky z-10 top-0 left-0 right-0">
+        <Menubar :model="items" class="bg-[#151b23]">
           <template #item="{ item, props, hasSubmenu }">
             <NuxtLink
               v-if="item.route"

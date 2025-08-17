@@ -1,6 +1,9 @@
 <template>
   <div
-    class="min-h-screen bg-zinc-900 flex flex-col items-center justify-center pt-5 pb-5"
+    :class="[
+      'flex flex-col items-center justify-center transition-all duration-300 py-6 lg:px-3',
+      timers.length > 9 ? 'min-h-screen' : 'min-h-[calc(100vh-4.5rem)]',
+    ]"
   >
     <div
       :class="[

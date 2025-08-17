@@ -5,7 +5,7 @@
       modal
       header="타이머를 생성해주세요."
       :style="{ width: '25rem', height: '22rem' }"
-      class="cursor-pointer"
+      class="cursor-pointer bg-zinc-900"
       @hide="handleHide"
     >
       <IconField class="mb-5">
@@ -42,12 +42,14 @@
         <Button
           type="button"
           variant="outlined"
+          icon="pi pi-times"
           label="취소"
           severity="secondary"
           @click="closeDialog"
         ></Button>
         <Button
           type="button"
+          icon="pi pi-check"
           label="저장"
           :disabled="isDisabled"
           @click="saveTimer"
