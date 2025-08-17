@@ -6,7 +6,9 @@
         class="grid grid-cols-1 sm:grid-cols-2 gap-40 mt-16"
       >
         <div class="card">
-          <h2 class="text-xl font-semibold mb-2 text-white">주간 활동 기록</h2>
+          <h2 class="text-xl font-semibold mb-2 text-white">
+            🗓️주간 활동 기록
+          </h2>
           <Chart
             type="bar"
             :data="dailyChartData"
@@ -16,7 +18,9 @@
         </div>
 
         <div class="card">
-          <h2 class="text-xl font-semibold mb-2 text-white">누적 활동 시간</h2>
+          <h2 class="text-xl font-semibold mb-2 text-white">
+            🏆누적 활동 시간
+          </h2>
           <Chart
             type="pie"
             :data="categoryChartData"

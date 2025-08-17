@@ -143,13 +143,13 @@ export function useChartData(records: Ref<TimerRecord[]>) {
   const categoryChartData = computed(() => {
     if (!process.client || !documentStyle.value) return {};
 
-    const categoryLabels = ["공부✏️", "독서📖", "운동🏀", "요리🍳", "기타🔥"];
+    const categoryLabels = ["공부✏️", "독서📖", "운동🏀", "요리🍳", "집중🔥"];
     const markCodeToLabelMap: { [key: string]: string } = {
       "✏️": "공부✏️",
       "📖": "독서📖",
       "🏀": "운동🏀",
       "🍳": "요리🍳",
-      "🔥": "기타🔥",
+      "🔥": "집중🔥",
     };
 
     const categoryDataMap = new Map<string, number>();
@@ -157,7 +157,7 @@ export function useChartData(records: Ref<TimerRecord[]>) {
 
     // 카테고리별 "사용 시간(분)" 집계
     records.value.forEach((record) => {
-      const label = markCodeToLabelMap[record.timerMark] || "기타🔥";
+      const label = markCodeToLabelMap[record.timerMark] || "집중🔥";
       if (categoryDataMap.has(label)) {
         categoryDataMap.set(
           label,

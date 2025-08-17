@@ -68,7 +68,7 @@ const timerMarks = ref([
   { name: "📖독서", code: "📖" },
   { name: "🏀운동", code: "🏀" },
   { name: "🍳요리", code: "🍳" },
-  { name: "🔥기타", code: "🔥" },
+  { name: "🔥집중", code: "🔥" },
 ]);
 
 const props = defineProps({
