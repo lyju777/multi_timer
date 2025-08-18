@@ -55,8 +55,6 @@ import { useTimerSound } from "~/composables/useTimerSound";
 const timersStore = useTimersStore();
 const { finishedTimerId, timers } = storeToRefs(timersStore);
 
-const router = useRouter();
-
 const items = ref([
   {
     label: "Home",
