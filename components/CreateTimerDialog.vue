@@ -44,7 +44,7 @@
           variant="outlined"
           icon="pi pi-times"
           label="취소"
-          severity="secondary"
+          severity="contrast"
           @click="closeDialog"
         ></Button>
         <Button
@@ -100,7 +100,7 @@ const saveTimer = () => {
     hours,
     minutes,
     timerMark: timerMark.value.code,
-    content: timerContent.value,
+    content: timerContent?.value,
   });
   closeDialog();
 }; // 타이머 시간 저장
@@ -112,8 +112,7 @@ const handleHide = () => {
 const isDisabled = computed(() => {
   return (
     (setTimer.value.getHours() === 0 && setTimer.value.getMinutes() === 0) ||
-    timerMark.value === undefined ||
-    timerContent.value === ""
+    timerMark.value === undefined
   );
 }); // 타이머 시간 비어있는지 확인
 </script>

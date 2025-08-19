@@ -169,7 +169,7 @@ const deleteTimer = (event: Event) => {
     rejectProps: {
       icon: "pi pi-times",
       label: "취소",
-      severity: "secondary",
+      severity: "contrast",
       outlined: true,
     },
     acceptProps: {

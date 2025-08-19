@@ -123,7 +123,7 @@ export const useTimersStore = defineStore(
         timer.workMinutes = payload.minutes;
         timer.remainingTime = payload.hours * 3600 + payload.minutes * 60;
         timer.timerMark = payload.timerMark;
-        timer.content = payload.content;
+        timer.content = payload?.content;
 
         timers.value.push({
           id: nextTimerId.value++,
