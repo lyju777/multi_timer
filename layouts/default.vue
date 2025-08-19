@@ -61,25 +61,9 @@
 import { useTimersStore } from "~/stores/timers";
 import TimerFinishedDialog from "~/components/TimerFinishedDialog.vue";
 import { useTimerSound } from "~/composables/useTimerSound";
-import type { Database } from "~/types/database";
+import { GoogleLogin } from "~/composables/GoogleLogin";
 
-const supabase = useSupabaseClient<Database>();
-const user = useSupabaseUser();
-
-const signInWithGoogle = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-  });
-  if (error) console.error("Error signing in with Google:", error.message);
-};
-
-const signOut = async () => {
-  const { error } = await supabase.auth.signOut();
-  if (error) console.error("Error signing out:", error.message);
-  // 로그아웃 시 기록 초기화
-  const historyStore = useHistoryStore();
-  historyStore.records = [];
-};
+const { user, signInWithGoogle, signOut } = GoogleLogin();
 
 const timersStore = useTimersStore();
 const { finishedTimerId, timers } = storeToRefs(timersStore);
