@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     "@primevue/nuxt-module",
     "@pinia/nuxt",
     "pinia-plugin-persistedstate/nuxt",
+    "@nuxtjs/supabase",
   ],
   css: ["~/assets/css/main.css", "primeicons/primeicons.css"],
   tailwindcss: {
@@ -23,6 +24,13 @@ export default defineNuxtConfig({
       theme: {
         preset: Aura,
       },
+    },
+  },
+  supabase: {
+    redirect: true,
+    redirectOptions: {
+      login: "/",
+      callback: "/",
     },
   },
 });

@@ -24,3 +24,11 @@ export interface TimerRecord {
   timerMark: string;
   content: string;
 }
+
+export interface supabaseRecord {
+  id: string;
+  completed_at: string;
+  duration_minutes: number;
+  timer_mark: string;
+  content: string;
+}

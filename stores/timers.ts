@@ -15,7 +15,7 @@ export const useTimersStore = defineStore(
         clearInterval(timerIntervals[timer.id]);
       }
 
-      timerIntervals[timer.id] = setInterval(() => {
+      timerIntervals[timer.id] = setInterval(async () => {
         const now = Date.now();
         const endTime = timer.endTime;
 
@@ -31,7 +31,7 @@ export const useTimersStore = defineStore(
 
           // history 스토어에 기록 추가
           const historyStore = useHistoryStore();
-          historyStore.addRecord({
+          await historyStore.addRecord({
             durationMinutes: timer.workHours * 60 + timer.workMinutes,
             timerMark: timer.timerMark,
             content: timer.content,

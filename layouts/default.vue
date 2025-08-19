@@ -29,10 +29,20 @@
           </template>
           <template #end>
             <Button
+              v-if="!user"
               severity="success"
               variant="text"
               label="Login"
               icon="pi pi-sign-in"
+              @click="signInWithGoogle"
+            />
+            <Button
+              v-else
+              severity="danger"
+              variant="text"
+              label="Logout"
+              icon="pi pi-sign-out"
+              @click="signOut"
             />
           </template>
         </Menubar>
@@ -51,9 +61,39 @@
 import { useTimersStore } from "~/stores/timers";
 import TimerFinishedDialog from "~/components/TimerFinishedDialog.vue";
 import { useTimerSound } from "~/composables/useTimerSound";
+import type { Database } from "~/types/database";
+
+const supabase = useSupabaseClient<Database>();
+const user = useSupabaseUser();
+
+const signInWithGoogle = async () => {
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+  });
+  if (error) console.error("Error signing in with Google:", error.message);
+};
+
+const signOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) console.error("Error signing out:", error.message);
+  // 로그아웃 시 기록 초기화
+  const historyStore = useHistoryStore();
+  historyStore.records = [];
+};
 
 const timersStore = useTimersStore();
 const { finishedTimerId, timers } = storeToRefs(timersStore);
+
+const historyStore = useHistoryStore();
+watch(
+  user,
+  (currentUser) => {
+    if (currentUser) {
+      historyStore.fetchRecords();
+    }
+  },
+  { immediate: true }
+);
 
 const items = ref([
   {

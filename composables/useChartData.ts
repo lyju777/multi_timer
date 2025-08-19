@@ -10,39 +10,37 @@ export function useChartData(records: Ref<TimerRecord[]>) {
     [key: string]: { code: string; color: string; borderColor: string };
   }>({});
 
-  onMounted(() => {
-    if (process.client) {
-      const styles = getComputedStyle(document.documentElement);
-      documentStyle.value = styles;
-      categoryConfig.value = {
-        "공부✏️": {
-          code: "✏️",
-          color: "rgba(255, 183, 77, 0.9)",
-          borderColor: "rgba(255, 183, 77, 1)",
-        },
-        "독서📖": {
-          code: "📖",
-          color: "rgba(147, 197, 253, 0.9)",
-          borderColor: "rgba(147, 197, 253, 1)",
-        },
-        "운동🏀": {
-          code: "🏀",
-          color: "rgba(134, 239, 172, 0.9)",
-          borderColor: "rgba(134, 239, 172, 1)",
-        },
-        "요리🍳": {
-          code: "🍳",
-          color: "rgba(196, 181, 253, 0.9)",
-          borderColor: "rgba(196, 181, 253, 1)",
-        },
-        "집중🔥": {
-          code: "🔥",
-          color: "rgba(252, 165, 165, 0.9)",
-          borderColor: "rgba(252, 165, 165, 1)",
-        },
-      };
-    }
-  });
+  if (process.client) {
+    const styles = getComputedStyle(document.documentElement);
+    documentStyle.value = styles;
+    categoryConfig.value = {
+      "공부✏️": {
+        code: "✏️",
+        color: "rgba(255, 183, 77, 0.9)",
+        borderColor: "rgba(255, 183, 77, 1)",
+      },
+      "독서📖": {
+        code: "📖",
+        color: "rgba(147, 197, 253, 0.9)",
+        borderColor: "rgba(147, 197, 253, 1)",
+      },
+      "운동🏀": {
+        code: "🏀",
+        color: "rgba(134, 239, 172, 0.9)",
+        borderColor: "rgba(134, 239, 172, 1)",
+      },
+      "요리🍳": {
+        code: "🍳",
+        color: "rgba(196, 181, 253, 0.9)",
+        borderColor: "rgba(196, 181, 253, 1)",
+      },
+      "집중🔥": {
+        code: "🔥",
+        color: "rgba(252, 165, 165, 0.9)",
+        borderColor: "rgba(252, 165, 165, 1)",
+      },
+    };
+  }
 
   // 누적 막대 차트 옵션 수정
   const barChartOptions = computed(() => ({
