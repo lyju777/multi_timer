@@ -1,53 +1,51 @@
 <template>
   <div>
-    <ClientOnly>
-      <div class="sticky z-10 top-0 left-0 right-0">
-        <Menubar :model="items" class="bg-[#151b23]">
-          <template #item="{ item, props, hasSubmenu }">
-            <NuxtLink
-              v-if="item.route"
-              v-slot="{ href, navigate }"
-              :to="item.route"
-              custom
-            >
-              <a v-ripple :href="href" v-bind="props.action" @click="navigate">
-                <span :class="item.icon" />
-                <span>{{ item.label }}</span>
-              </a>
-            </NuxtLink>
-            <a
-              v-else
-              v-ripple
-              :href="item.url"
-              :target="item.target"
-              v-bind="props.action"
-            >
+    <div class="sticky z-10 top-0 left-0 right-0">
+      <Menubar :model="items">
+        <template #item="{ item, props, hasSubmenu }">
+          <NuxtLink
+            v-if="item.route"
+            v-slot="{ href, navigate }"
+            :to="item.route"
+            custom
+          >
+            <a v-ripple :href="href" v-bind="props.action" @click="navigate">
               <span :class="item.icon" />
               <span>{{ item.label }}</span>
-              <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down" />
             </a>
-          </template>
-          <template #end>
-            <Button
-              v-if="!user"
-              severity="success"
-              variant="text"
-              label="Login"
-              icon="pi pi-sign-in"
-              @click="signInWithGoogle"
-            />
-            <Button
-              v-else
-              severity="danger"
-              variant="text"
-              label="Logout"
-              icon="pi pi-sign-out"
-              @click="signOut"
-            />
-          </template>
-        </Menubar>
-      </div>
-    </ClientOnly>
+          </NuxtLink>
+          <a
+            v-else
+            v-ripple
+            :href="item.url"
+            :target="item.target"
+            v-bind="props.action"
+          >
+            <span :class="item.icon" />
+            <span>{{ item.label }}</span>
+            <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down" />
+          </a>
+        </template>
+        <template #end>
+          <Button
+            v-if="!user"
+            severity="success"
+            variant="text"
+            label="Login"
+            icon="pi pi-sign-in"
+            @click="signInWithGoogle"
+          />
+          <Button
+            v-else
+            severity="danger"
+            variant="text"
+            label="Logout"
+            icon="pi pi-sign-out"
+            @click="signOut"
+          />
+        </template>
+      </Menubar>
+    </div>
     <slot />
     <TimerFinishedDialog
       v-if="finishedTimer"

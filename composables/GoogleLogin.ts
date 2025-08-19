@@ -8,6 +8,12 @@ export const GoogleLogin = () => {
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: {
+        queryParams: {
+          prompt: "consent", // 매번 동의 화면 표시
+          access_type: "offline", // 리프레시 토큰 발급
+        },
+      },
     });
     if (error) console.error("Error signing in with Google:", error.message);
   };
