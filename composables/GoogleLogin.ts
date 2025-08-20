@@ -10,7 +10,7 @@ export const GoogleLogin = () => {
       provider: "google",
       options: {
         queryParams: {
-          prompt: "consent", // 매번 동의 화면 표시
+          prompt: "consent", // 매번 동의
           access_type: "offline", // 리프레시 토큰 발급
         },
       },
