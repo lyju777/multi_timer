@@ -19,19 +19,18 @@
         raised
         rounded
         icon="pi pi-plus"
-        severity="success"
         outlined
       />
     </div>
     <!-- 타이머 디스플레이 -->
     <div
       v-else
-      class="grid grid-flow-col gap-5 text-center auto-cols-max mt-10"
+      class="grid grid-flow-col gap-5 text-center auto-cols-max mt-10 justify-center"
     >
       <div
         class="flex flex-col p-4 max-w-20 bg-[#0b0809] rounded-lg text-neutral-content"
       >
-        <span class="countdown font-mono text-5xl">
+        <span class="countdown font-mono text-4xl sm:text-5xl">
           <span :style="{ '--value': hours }">{{ hours }}</span>
         </span>
         hours
@@ -39,7 +38,7 @@
       <div
         class="flex flex-col p-4 max-w-20 bg-[#0b0809] rounded-lg text-neutral-content"
       >
-        <span class="countdown font-mono text-5xl">
+        <span class="countdown font-mono text-4xl sm:text-5xl">
           <span :style="{ '--value': minutes }">{{ minutes }}</span>
         </span>
         min
@@ -47,7 +46,7 @@
       <div
         class="flex flex-col p-4 max-w-20 bg-[#0b0809] rounded-lg text-neutral-content"
       >
-        <span class="countdown font-mono text-5xl">
+        <span class="countdown font-mono text-4xl sm:text-5xl">
           <span :style="{ '--value': seconds }">{{ seconds }}</span>
         </span>
         sec
