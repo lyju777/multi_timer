@@ -13,7 +13,7 @@ useSeoMeta({
   ogTitle: "Multi_Timer",
   ogDescription: "타이머를 통해 목표를 달성하세요",
   ogType: "website",
-  ogImage: "/og-image.png",
+  ogImage: "image/og-image.png",
 });
 </script>
 
