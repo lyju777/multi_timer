@@ -90,10 +90,12 @@ import type { PropType } from "vue";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { useTimersStore } from "~/stores/timers";
+import { useTimerSound } from "~/composables/useTimerSound";
 
 const confirm = useConfirm();
 const toast = useToast();
 const timersStore = useTimersStore();
+const { initAudioContext } = useTimerSound();
 
 const props = defineProps({
   timer: {
@@ -141,6 +143,7 @@ const hours = computed(() =>
 );
 
 const startTimer = () => {
+  initAudioContext(); // 사용자가 재생 버튼을 누르는 시점에 오디오 컨텍스트 초기화
   if (timerData.value) {
     timersStore.startTimer(timerData.value.id);
   }
