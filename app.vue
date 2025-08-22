@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-app-dark">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -14,6 +14,12 @@ useSeoMeta({
   ogDescription: "타이머를 통해 목표를 달성하세요",
   ogType: "website",
   ogImage: "img/og-image.png",
+});
+
+useHead({
+  htmlAttrs: {
+    class: "my-app-dark",
+  },
 });
 </script>
 
