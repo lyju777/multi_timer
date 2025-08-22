@@ -122,6 +122,14 @@ export function useChartData(records: Ref<TimerRecord[]>) {
     );
   });
 
+  // 날짜를 'YYYY-MM-DD' 형식으로 변환
+  const formatDateToYYYYMMDD = (date: Date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   // 콤보 차트(누적 막대 + 선) 데이터 재구성
   const dailyChartData = computed(() => {
     if (
@@ -147,7 +155,7 @@ export function useChartData(records: Ref<TimerRecord[]>) {
     for (let i = 6; i >= 0; i--) {
       const date = new Date();
       date.setDate(today.getDate() - i);
-      const dateKey = date.toISOString().split("T")[0] as string;
+      const dateKey = formatDateToYYYYMMDD(date);
       dateKeys.push(dateKey);
 
       const categoryMap = new Map<string, number>();
@@ -157,9 +165,7 @@ export function useChartData(records: Ref<TimerRecord[]>) {
 
     // 날짜별, 카테고리별 타이머 완료 "개수" 집계
     recentRecords.value.forEach((record) => {
-      const recordDateKey = new Date(record.completedAt)
-        .toISOString()
-        .split("T")[0] as string;
+      const recordDateKey = formatDateToYYYYMMDD(new Date(record.completedAt));
       const label = markCodeToLabelMap[record.timerMark] || "집중🔥";
 
       const dayMap = dailyDataMap.get(recordDateKey);
